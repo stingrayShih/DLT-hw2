@@ -19,7 +19,17 @@ class DataCollator(DataCollatorForTokenClassification):
         # The updated type of the three variables should be `torch.int64``.
         # Hint: some functions and variables you may want to use: `self.tokenizer.pad()`, `self.label_pad_token_id`.
         # --- TODO: start of your code ---
-
+        batch = self.tokenizer.pad(
+            {"input_ids": tk_ids, "attention_mask": attn_masks, "labels": lbs},
+            padding=self.padding,
+            max_length=self.max_length,
+            pad_to_multiple_of=self.pad_to_multiple_of,
+            return_tensors="pt",
+        )
+        
+        tk_ids = batch['input_ids'].type(torch.int64)
+        attn_masks = batch['attention_mask'].type(torch.int64)
+        lbs = batch['labels'].type(torch.int64)
         # --- TODO: end of your code ---
 
         return Batch(input_ids=tk_ids, attention_mask=attn_masks, labels=lbs)
