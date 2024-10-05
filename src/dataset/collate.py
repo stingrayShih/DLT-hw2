@@ -24,13 +24,14 @@ class DataCollator(DataCollatorForTokenClassification):
             padding=True
         )
         
-        tk_ids = batch['input_ids'].type(torch.int64)
-        attn_masks = batch['attention_mask'].type(torch.int64)
-        lbs = batch['labels'].type(torch.int64)
         
-        tk_ids = batch['input_ids'].type(torch.int64)
-        attn_masks = batch['attention_mask'].type(torch.int64)
-        lbs = batch['labels'].type(torch.int64)
+        tk_ids = torch.LongTensor(batch['input_ids'])
+        print("tk_ids",tk_ids.shape)
+        attn_masks = torch.LongTensor(batch['attention_mask'])
+        print("attn_masks",attn_masks.shape)
+        print(batch['labels'])
+        lbs = torch.LongTensor(batch['labels'])
+
         # --- TODO: end of your code ---
 
         return Batch(input_ids=tk_ids, attention_mask=attn_masks, labels=lbs)
