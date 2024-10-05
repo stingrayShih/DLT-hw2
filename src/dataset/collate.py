@@ -21,11 +21,12 @@ class DataCollator(DataCollatorForTokenClassification):
         # --- TODO: start of your code ---
         batch = self.tokenizer.pad(
             {"input_ids": tk_ids, "attention_mask": attn_masks, "labels": lbs},
-            padding=self.padding,
-            max_length=self.max_length,
-            pad_to_multiple_of=self.pad_to_multiple_of,
-            return_tensors="pt",
+            padding=True
         )
+        
+        tk_ids = batch['input_ids'].type(torch.int64)
+        attn_masks = batch['attention_mask'].type(torch.int64)
+        lbs = batch['labels'].type(torch.int64)
         
         tk_ids = batch['input_ids'].type(torch.int64)
         attn_masks = batch['attention_mask'].type(torch.int64)
