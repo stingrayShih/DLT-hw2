@@ -116,6 +116,7 @@ class Dataset(torch.utils.data.Dataset):
         # Hint: labels corresponding to [CLS], [SEP], and non-first subword tokens should be masked out.
         # You should store the updated label sequence in the `bert_lbs_list` variable.
         # --- TODO: start of your code ---
+        '''
         for idx, (tks, original_lbs) in enumerate(zip(self._token_ids, self._lbs)):
             word_ids = tokenized_text.word_ids(batch_index=idx)  # Get word IDs for current sequence
             bert_lbs = [MASKED_LB_ID] * len(tks)  # Initialize with masked labels
@@ -125,6 +126,28 @@ class Dataset(torch.utils.data.Dataset):
                     if tks[i] != tokenizer.cls_token_id and tks[i] != tokenizer.sep_token_id and not tokenizer.convert_ids_to_tokens(tks[i]).startswith("##"):
                         bert_lbs[i] = lb2idx.get(original_lbs[word_id], MASKED_LB_ID)
 
+            bert_lbs_list.append(bert_lbs)
+        '''
+        for idx, (tks, original_lbs) in enumerate(zip(self._token_ids, self._lbs)):
+            word_ids = tokenized_text.word_ids(batch_index=idx)  # Get word IDs for current sequence
+            bert_lbs = [MASKED_LB_ID] * len(tks)  # Initialize with masked labels
+
+            #######
+            text=[]
+
+            for i, word_id in enumerate(word_ids):
+                if word_id is not None:  # Check if it's a real word
+                    
+                    text.append(tokenizer.convert_ids_to_tokens(tks[i]))
+                    if tks[i] != tokenizer.cls_token_id and tks[i] != tokenizer.sep_token_id:
+                        _token=tokenizer.convert_ids_to_tokens(tks[i])
+                        if _token.isalnum():
+                            bert_lbs[i] = lb2idx.get(original_lbs[word_id], MASKED_LB_ID)
+                        
+            
+            print(text)
+            print(bert_lbs)
+            print('')
             bert_lbs_list.append(bert_lbs)
         # --- TODO: end of your code ---
 
