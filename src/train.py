@@ -171,8 +171,8 @@ class Trainer:
         # Your result should match the result from `outputs.loss`.
         # --- TODO: start of your code ---
         logits=logits.permute((0,2,1))
-        print("logits",logits.shape)
-        print("lbs", lbs.shape)
+        #print("logits",logits.shape)
+        #print("lbs", lbs.shape)
         
         return self._loss(logits, lbs)
         # --- TODO: end of your code ---
