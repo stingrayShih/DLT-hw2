@@ -132,23 +132,33 @@ class Dataset(torch.utils.data.Dataset):
             word_ids = tokenized_text.word_ids(batch_index=idx)  # Get word IDs for current sequence
             bert_lbs = [MASKED_LB_ID] * len(tks)  # Initialize with masked labels
 
+            
+
             #######
             text=[]
+            counter=0
+            
 
             for i, word_id in enumerate(word_ids):
                 if word_id is not None:  # Check if it's a real word
                     
                     text.append(tokenizer.convert_ids_to_tokens(tks[i]))
+                    
                     if tks[i] != tokenizer.cls_token_id and tks[i] != tokenizer.sep_token_id:
-                        _token=tokenizer.convert_ids_to_tokens(tks[i])
-                        if _token.isalnum():
+                        _token=tokenizer.convert_ids_to_tokens(tks[i]) 
+                        if not _token.startswith("##"):
                             bert_lbs[i] = lb2idx.get(original_lbs[word_id], MASKED_LB_ID)
+                            counter+=1
+                        
                         
             
+            print('original_lbs',original_lbs)
             print(text)
             print(bert_lbs)
+            print(len(original_lbs), counter, len(original_lbs)==counter)
             print('')
             bert_lbs_list.append(bert_lbs)
+        raise
         # --- TODO: end of your code ---
 
         for tks, lbs in zip(self._token_ids, bert_lbs_list):
