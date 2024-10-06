@@ -503,6 +503,10 @@ class Trainer:
         # TODO: The string elements represent the enitity labels, such as "O" or "B-PER".
         # --- TODO: start of your code ---
         pred_lbs=[]
+        real_lbs=[]
+
+
+
         idx2lb={idx: lb for idx, lb in enumerate(self._config.bio_label_types)}
         for batch in tqdm(data_loader):
           batch.to(self._device)
@@ -510,22 +514,25 @@ class Trainer:
           with torch.no_grad():
             outputs = self._model(input_ids=batch.input_ids, attention_mask=batch.attention_mask, labels=batch.labels)
             logits=outputs.logits.cpu().numpy()
-            #attention_mask=batch.attention_mask.cpu().numpy()
+            attention_mask=batch.attention_mask.cpu().numpy()
             batch_real_labels=batch.labels.cpu().numpy()
-            print(logits.shape)
+            
 
 
-          for logit, real_labels in zip(logits, batch_real_labels):
+          for logit, real_labels, masks in zip(logits, batch_real_labels, attention_mask):
             predictions=np.argmax(logit, axis=-1).tolist()
             #print(label)
             str_labels=[]
             #print("masks",masks)
+            temp_real_lb=[]
 
 
-            for prediction, real_label  in zip(predictions, real_labels):
-              if real_label!=-100:
+            for prediction, real_label, mask in zip(predictions, real_labels, masks):
+              if real_label!=-100 and mask==1:
                 str_labels.append(idx2lb[prediction])
+                temp_real_lb.append(idx2lb[real_label])
             pred_lbs.append(str_labels)
+            real_lbs.append(temp_real_lb)
           #print(str_labels)
 
         print('pred_lbs',len(pred_lbs),[len(x) for x in pred_lbs])
@@ -533,8 +540,10 @@ class Trainer:
 
 
         for i in range(len(pred_lbs)):
-          print('pred_lbs', pred_lbs[i])
+          #print('pred_lbs', pred_lbs[i])
+          print('real label', real_lbs[i])
           print('dataset label', dataset.lbs[i])
+          print('   ')
 
         
         # --- TODO: end of your code ---
