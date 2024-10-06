@@ -446,6 +446,8 @@ class Trainer:
             self._optimizer.zero_grad()
             loss.backward()
             self._optimizer.step()
+            self._scheduler.step()
+            print(loss.item)
 
             # --- TODO: end of your code ---
 
