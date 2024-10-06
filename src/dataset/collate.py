@@ -34,8 +34,8 @@ class DataCollator(DataCollatorForTokenClassification):
         max_len=tk_ids.shape[1]
         #print('max_len',max_len)
         for i in range(len(lbs)):
-          lbs[i] = lbs[i]+[self.label_pad_token_id]*(max_len-len(lbs[i]))
-          #print(lbs[i])
+            lbs[i] = lbs[i]+[self.label_pad_token_id]*(max_len-len(lbs[i]))
+            #print(lbs[i])
 
         lbs=torch.LongTensor(lbs)
         #print("lbs", lbs.shape, lbs.dtype)
