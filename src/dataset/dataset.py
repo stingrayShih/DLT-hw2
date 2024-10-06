@@ -137,6 +137,8 @@ class Dataset(torch.utils.data.Dataset):
             #######
             text=[]
             counter=0
+
+            last_word_id=None
             
 
             for i, word_id in enumerate(word_ids):
@@ -145,20 +147,22 @@ class Dataset(torch.utils.data.Dataset):
                     text.append(tokenizer.convert_ids_to_tokens(tks[i]))
                     
                     if tks[i] != tokenizer.cls_token_id and tks[i] != tokenizer.sep_token_id:
-                        _token=tokenizer.convert_ids_to_tokens(tks[i]) 
-                        if not _token.startswith("##"):
+                         
+                        if not word_id==last_word_id:
                             bert_lbs[i] = lb2idx.get(original_lbs[word_id], MASKED_LB_ID)
                             counter+=1
+                    last_word_id=word_id
                         
                         
-            
+            '''
             print('original_lbs',original_lbs)
             print(text)
             print(bert_lbs)
             print(len(original_lbs), counter, len(original_lbs)==counter)
             print('')
+            '''
             bert_lbs_list.append(bert_lbs)
-        raise
+        
         # --- TODO: end of your code ---
 
         for tks, lbs in zip(self._token_ids, bert_lbs_list):
