@@ -510,23 +510,31 @@ class Trainer:
           with torch.no_grad():
             outputs = self._model(input_ids=batch.input_ids, attention_mask=batch.attention_mask, labels=batch.labels)
             logits=outputs.logits.cpu().numpy()
-            attention_mask=batch.attention_mask.cpu().numpy()
+            #attention_mask=batch.attention_mask.cpu().numpy()
+            batch_real_labels=batch.labels.cpu().numpy()
             print(logits.shape)
 
-          for logit, masks in zip(logits, attention_mask):
-            labels=np.argmax(logit, axis=-1).tolist()
+
+          for logit, real_labels in zip(logits, batch_real_labels):
+            predictions=np.argmax(logit, axis=-1).tolist()
             #print(label)
             str_labels=[]
             #print("masks",masks)
 
-            for label, mask  in zip(labels, masks):
-              if mask==1:
-                str_labels.append(idx2lb[label])
+
+            for prediction, real_label  in zip(predictions, real_labels):
+              if real_label!=-100:
+                str_labels.append(idx2lb[prediction])
             pred_lbs.append(str_labels)
           #print(str_labels)
 
         print('pred_lbs',len(pred_lbs),[len(x) for x in pred_lbs])
         print('dataset_lbs',len(dataset.lbs),[len(x) for x in dataset.lbs])
+
+
+        for i in range(len(pred_lbs)):
+          print('pred_lbs', pred_lbs[i])
+          print('dataset label', dataset.lbs[i])
 
         
         # --- TODO: end of your code ---
