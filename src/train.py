@@ -206,7 +206,32 @@ class Trainer:
         # TODO: Predicted labels for each sample in the dataset and stored in `pred_lbs`, a list of list of strings.
         # TODO: The string elements represent the enitity labels, such as "O" or "B-PER".
         # --- TODO: start of your code ---
+        pred_lbs=[]
         idx2lb={idx: lb for idx, lb in enumerate(self._config.bio_label_types)}
+        for batch in tqdm(data_loader):
+          batch.to(self._device)
+          
+          with torch.no_grad():
+            outputs = self._model(input_ids=batch.input_ids, attention_mask=batch.attention_mask, labels=batch.labels)
+            logits=outputs.logits.cpu().numpy()
+            attention_mask=batch.attention_mask.cpu().numpy()
+            print(logits.shape)
+
+          for logit, mask in enumerate(logits, attention_mask):
+            label=np.argmax(logit, axis=-1).tolist()
+            #print(label)
+            str_labels=[]
+
+            for _ in label:
+              if mask==1:
+                str_labels.append(idx2lb[_])
+            pred_lbs.append(str_labels)
+          #print(str_labels)
+
+        print('pred_lbs',len(pred_lbs),[len(x) for x in pred_lbs])
+        print('dataset_lbs',len(dataset.lbs),[len(x) for x in dataset.lbs])
+
+        
         # --- TODO: end of your code ---
 
         metric = get_ner_metrics(dataset.lbs, pred_lbs, detailed=detailed)
