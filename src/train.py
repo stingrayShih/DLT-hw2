@@ -517,7 +517,7 @@ class Trainer:
             labels=np.argmax(logit, axis=-1).tolist()
             #print(label)
             str_labels=[]
-            print("masks",masks)
+            #print("masks",masks)
 
             for label, mask  in zip(labels, masks):
               if mask==1:
