@@ -206,7 +206,7 @@ class Trainer:
         # TODO: Predicted labels for each sample in the dataset and stored in `pred_lbs`, a list of list of strings.
         # TODO: The string elements represent the enitity labels, such as "O" or "B-PER".
         # --- TODO: start of your code ---
-
+        idx2lb={idx: lb for idx, lb in enumerate(self._config.bio_label_types)}
         # --- TODO: end of your code ---
 
         metric = get_ner_metrics(dataset.lbs, pred_lbs, detailed=detailed)
