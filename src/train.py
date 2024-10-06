@@ -221,7 +221,7 @@ class Trainer:
             labels=np.argmax(logit, axis=-1).tolist()
             #print(label)
             str_labels=[]
-            print("masks",masks)
+            #print("masks",masks)
 
             for label, mask  in zip(labels, masks):
               if mask==1:
@@ -229,8 +229,8 @@ class Trainer:
             pred_lbs.append(str_labels)
           #print(str_labels)
 
-        print('pred_lbs',len(pred_lbs),[len(x) for x in pred_lbs])
-        print('dataset_lbs',len(dataset.lbs),[len(x) for x in dataset.lbs])
+        #print('pred_lbs',len(pred_lbs),[len(x) for x in pred_lbs])
+        #print('dataset_lbs',len(dataset.lbs),[len(x) for x in dataset.lbs])
 
         
         # --- TODO: end of your code ---
@@ -535,15 +535,16 @@ class Trainer:
             real_lbs.append(temp_real_lb)
           #print(str_labels)
 
-        print('pred_lbs',len(pred_lbs),[len(x) for x in pred_lbs])
-        print('dataset_lbs',len(dataset.lbs),[len(x) for x in dataset.lbs])
+        #print('pred_lbs',len(pred_lbs),[len(x) for x in pred_lbs])
+        #print('dataset_lbs',len(dataset.lbs),[len(x) for x in dataset.lbs])
 
-
+        '''
         for i in range(len(pred_lbs)):
           #print('pred_lbs', pred_lbs[i])
           print('real label', real_lbs[i])
           print('dataset label', dataset.lbs[i])
           print('   ')
+        '''
 
         
         # --- TODO: end of your code ---
