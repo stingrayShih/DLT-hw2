@@ -140,6 +140,7 @@ class Trainer:
 
             outputs = self._model(input_ids=batch.input_ids, attention_mask=batch.attention_mask, labels=batch.labels)
             loss = self.get_loss(outputs.logits, batch.labels)
+           
             assert torch.abs(loss - outputs.loss) < 1e-6, ValueError("Loss mismatch!")
 
             # Do backpropagation and update the model parameters, and track the training loss.
@@ -169,7 +170,11 @@ class Trainer:
         # Compute the loss for the batch of data.
         # Your result should match the result from `outputs.loss`.
         # --- TODO: start of your code ---
-
+        logits=logits.permute((0,2,1))
+        print("logits",logits.shape)
+        print("lbs", lbs.shape)
+        
+        return self._loss(logits, lbs)
         # --- TODO: end of your code ---
 
     def eval_and_save(self):
