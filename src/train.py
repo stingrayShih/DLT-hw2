@@ -150,6 +150,7 @@ class Trainer:
             self._optimizer.zero_grad()
             loss.backward()
             self._optimizer.step()
+            print(loss.item())
 
             # --- TODO: end of your code ---
 
@@ -215,7 +216,7 @@ class Trainer:
             outputs = self._model(input_ids=batch.input_ids, attention_mask=batch.attention_mask, labels=batch.labels)
             logits=outputs.logits.cpu().numpy()
             attention_mask=batch.attention_mask.cpu().numpy()
-            print(logits.shape)
+            #print(logits.shape)
 
           for logit, masks in zip(logits, attention_mask):
             labels=np.argmax(logit, axis=-1).tolist()
