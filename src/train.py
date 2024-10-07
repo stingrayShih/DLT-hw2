@@ -150,7 +150,9 @@ class Trainer:
             self._optimizer.zero_grad()
             loss.backward()
             self._optimizer.step()
-            print(loss.item())
+            
+            train_loss += loss.item()
+            n_tks += 1
 
             # --- TODO: end of your code ---
 
@@ -448,7 +450,9 @@ class Trainer:
             loss.backward()
             self._optimizer.step()
             self._scheduler.step()
-            print(loss.item)
+            
+            train_loss += loss.item()
+            n_tks += 1
 
             # --- TODO: end of your code ---
 
