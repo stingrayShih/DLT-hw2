@@ -452,7 +452,8 @@ class Trainer:
             self._scheduler.step()
             
             train_loss += loss.item()
-            n_tks += 1
+            #n_tks += 1
+            n_tks += (batch.labels != MASKED_LB_ID).sum().item()
 
             # --- TODO: end of your code ---
 
